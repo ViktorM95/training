@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+   <meta charset="UTF-8">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Тренировка</title>
+   
+   <style>
+      * {
+   margin: 0;
+   padding: 0;
+}
+
+html {
+   font-size: 32px;
+   font-family: sans-serif;
+   width: 80vw;
+   height: 100vh;
+   margin: 0 auto;
+}
+
+hr {
+   border: 1px solid rgb(73, 73, 73);
+   width: 50%;
+   margin: 0 auto;
+}
+
+.content {
+   width: 100%;
+   height: 100%;
+   margin: 0 auto;
+   text-align: center;
+   /*border: 1px solid black;*/
+
+   font-size: 3rem;
+}
+
+header {
+   /*border: 1px solid black;*/
+   height: 25%;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   flex-direction: column;
+   font-size: 1rem;
+}
+
+header h1 {
+   margin-bottom: 1rem;
+}
+
+header p span {
+   padding-right: 1rem;
+}
+
+header p span:last-child {
+   padding-right: 0;
+}
+
+main {
+   /*border: 1px solid black;*/
+   height: 50%;
+
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   flex-direction: column;
+   font-size: 1rem;
+}
+
+select {
+   margin-left: 3%;
+
+   font-size: 1rem;
+   height: 1.5rem;
+   width: 3rem;
+   text-align: center;
+}
+
+
+footer {
+   /*border: 1px solid black;*/
+   height: 25%;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   flex-direction: column;
+}
+
+footer p {
+   font-size: 1rem;
+   ;
+}
+
+.btn {
+   width: 40%;
+   font-size: 1rem;
+   padding: 10px;
+   border-radius: 10px;
+   margin-top: auto 0;
+   margin-bottom: auto 0;
+   cursor: pointer;
+}
+
+
+
+@media screen and (max-width: 400px) {
+   html {
+      font-size: 18px;
+      width: 100vw;
+      height: 80vh;
+      margin: 0 auto;
+
+   }
+
+   hr {
+      width: 80%;
+   }
+
+   main {
+      font-size: 1.5rem;
+      display: flex;
+      flex-direction: column;
+   }
+
+   select {
+      font-size: 1.2em;
+      margin-top: 15px;
+      height: 3rem;
+      width: 3.5rem;
+   }
+
+   .btn {
+      width: 10rem;
+   }
+   footer p{
+      font-size: 1.3rem;
+   }
+}
+   </style>
+
+</head>
+
+<body class="content">
+   <header>
+      <h1>Тренировка</h1>
+   </header>
+   <hr>
+   <main>
+      <p>Количество кругов</p>
+      <select name="choise" id="choise">
+         <option value="1">1</option>
+         <option value="2">2</option>
+         <option value="4">4</option>
+      </select>
+   </main>
+   <hr>
+   <footer>
+      <button class="btn">СТАРТ</button>
+   </footer>
+
+   
+   <script>
+
+const btn = document.querySelector('button');
+btn.addEventListener('click', start);
+
+const numbersOfLaps = document.querySelector('select'); /** Общее количество кругов */
+let currentLap = 1;  /** Текущий круг */
+let curentExercise = 1;    /** Текущее упражнение */
+const amountOfExercise = 4;  /** Количество упражнений */
+const timeRest = 3;
+
+/* список упражнений*/
+const exerciseArray = [
+   {
+      name: "Подтягивание",
+      amount: '4 раз'
+   },
+   {
+      name: "Пресс",
+      amount: '10 раз'
+   },
+   {
+      name: "Отжимание",
+      amount: '7 раз'
+   },
+   {
+      name: "Пресс",
+      amount: '10 раз'
+   }
+];
+
+/** СТАРТ ТРЕНИРОВКИ */
+function start() {
+   /** ИЗМЕНЕНИЯ В header */
+   /* Добавляем счетчик кругов */
+   const checkLaps = document.getElementsByTagName('h1')[0];
+   checkLaps.innerHTML = "Круг <span id='current_lap'>" +      currentLap + "</span> / <span id='number_of_laps'>" + numbersOfLaps.value + "</span>";
+
+   /* Добавляем счетчик упражнений */
+   const checkExercises = document.createElement('p');
+   checkExercises.innerHTML = "<span id='1'>1</span>   <span id='2'>2</span>   <span id='3'>3</span>   <span id='4'>4</span>";
+   document.querySelector('header').append(checkExercises);
+   
+   /** ИЗМЕНЕНИЯ В main */
+   document.querySelector('main p').remove();
+   document.querySelector('main select').remove();
+
+   /** ИЗМЕНЕНИЯ В footer */
+   btn.innerHTML = "ВЫПОЛНЕНО";
+   btn.removeEventListener('click', start);
+   btn.addEventListener('click', performed);
+
+   performance();
+}
+
+/** ФУНЦИЯ ВЫПОЛНЕНИЯ (процесс тренировки) */
+function performance() {
+   const span_header = document.querySelectorAll('header p span');
+   for (let i = 1; i <= amountOfExercise; i++) {
+      if (curentExercise === i) {
+         span_header[curentExercise - 1].style.fontWeight = '700';
+         span_header[curentExercise - 1].style.fontSize = '1.3rem';
+      }
+   }
+
+   /* Обновляем счетчик кругов */
+   const checkLaps = document.getElementsByTagName('h1')[0];
+   checkLaps.innerHTML = "Круг <span id='current_lap'>" +      currentLap + "</span> / <span id='number_of_laps'>" + numbersOfLaps.value + "</span>";
+   
+   /* Добавляем название текущего упражнения */
+   console.log(curentExercise);
+   const nameExercise = document.createElement('p');
+   nameExercise.innerHTML = exerciseArray[curentExercise - 1].name;
+   document.querySelector('main').append(nameExercise);
+
+   /* Добавляем текущее количество повторений упражнения */
+   const amountExercise = document.createElement('p');
+   amountExercise.innerHTML = exerciseArray[curentExercise - 1].amount;
+   document.querySelector('main').append(amountExercise);
+   
+   
+
+
+   btn.style.display = 'block';
+} 
+
+
+/** ФУНЦИЯ ВЫПОЛНЕНО (переход  отдыху) */
+function performed() {
+   /** проверка на окончание тренировки */
+   if(currentLap == numbersOfLaps.value && curentExercise == 4){
+         finish();
+   }
+
+   const span_header = document.querySelectorAll('header p span');
+   span_header[curentExercise - 1].style.fontWeight = '400';
+   span_header[curentExercise - 1].style.fontSize = '1rem';
+   
+   const nameExercise = document.querySelector('main p');
+   nameExercise.remove();
+   const amountExercise = document.querySelector('main p');
+   amountExercise.remove();
+
+   btn.style.display = 'none';
+
+   rest();
+
+   /* Добавляем название следующего упражнения */
+   const nextNameExercise = document.createElement('p');
+   nextNameExercise.innerHTML = exerciseArray[curentExercise].name;
+   document.querySelector('footer').append(nextNameExercise);
+
+    /* Добавляем следующего количество повторений упражнения */
+    const nextAmountExercise = document.createElement('p');
+    nextAmountExercise.innerHTML = exerciseArray[curentExercise].amount;
+    document.querySelector('footer').append(nextAmountExercise);
+}
+
+function rest() { 
+   let time = timeRest;
+   
+   const textRest = document.createElement('p');
+   textRest.innerHTML = "Отдых";
+   document.querySelector('main').append(textRest);
+
+   
+   let textTimer = document.createElement('p');
+   document.querySelector('main').append(textTimer);
+   textTimer.innerHTML = time;
+
+   let timer = setInterval(()=>{
+      time--;
+      textTimer.innerHTML = time;   
+      if(time === 0){
+         clearInterval(timer);
+         textRest.remove();
+         textTimer.remove();
+         curentExercise++;
+         if(curentExercise >= 5){
+            console.log(curentExercise);
+            curentExercise = 1;
+            currentLap++;
+            console.log(`Упражнение - ${curentExercise}; Круг - ${currentLap}`)
+            performance();
+         }  
+         const nextNameExercise = document.querySelector('footer p');
+         nextNameExercise.remove();
+         const nextAmountExercise = document.querySelector('footer p');
+         nextAmountExercise.remove();
+         performance();
+      }
+   }, 1000);
+   textTimer.innerHTML = timer;
+   
+}
+
+function finish() {
+   const checkLaps = document.getElementsByTagName('h1')[0];
+   checkLaps.remove();
+   const checkExercises = document.querySelector('header p');
+   checkExercises.remove();
+
+   const nameExercise = document.querySelector('main p');
+   nameExercise.remove();
+   const amountExercise = document.querySelector('main p');
+   amountExercise.remove();
+
+   const textFinish = document.createElement('p');
+   textFinish.innerHTML = "Тренировка окончена";
+   document.querySelector('main').append(textFinish);
+
+   btn.style.display = 'none';
+}
+
+
+   </script>
+</body>
+
+</html>
